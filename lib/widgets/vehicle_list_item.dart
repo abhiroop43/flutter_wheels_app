@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/widgets/vehicle_stat_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VehicleListItem extends StatelessWidget {
@@ -11,6 +12,11 @@ class VehicleListItem extends StatelessWidget {
   });
 
   final List<Vehicle> vehicles;
+
+  String get fuelTypeGetter {
+    return vehicles[index].fuelType.name[0].toUpperCase() +
+        vehicles[index].fuelType.name.substring(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,21 @@ class VehicleListItem extends StatelessWidget {
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              VehicleStatItem(
+                                  label: vehicles[index].year.toString(),
+                                  icon: Icons.calendar_month),
+                              VehicleStatItem(
+                                  label: vehicles[index].priceInUsd.toString(),
+                                  icon: Icons.attach_money),
+                              VehicleStatItem(
+                                  label: fuelTypeGetter,
+                                  icon: Icons.local_gas_station)
+                            ],
                           )
                         ],
                       ),
