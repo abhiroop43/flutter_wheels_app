@@ -12,8 +12,9 @@ class CategoriesScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Categories',
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer)),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: GridView(
           padding: EdgeInsets.all(24),
