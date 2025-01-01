@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/screens/vehicles_details_screen.dart';
 import 'package:flutter_wheels_app/widgets/vehicle_stat_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -26,7 +27,11 @@ class VehicleListItem extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         elevation: 3,
         child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return VehiclesDetailsScreen(vehicle: vehicles[index]);
+              }));
+            },
             child: Stack(
               children: [
                 FadeInImage(

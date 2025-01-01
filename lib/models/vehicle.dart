@@ -21,8 +21,9 @@ class Vehicle {
   final TransmissionType transmissionType;
   final String imageUrl;
   final ProductionStatus productionStatus;
+  bool isFavorite = false;
 
-  const Vehicle({
+  Vehicle({
     required this.id,
     required this.name,
     required this.brand,
@@ -39,25 +40,30 @@ class Vehicle {
     required this.productionStatus,
   });
 
+  void toggleFavorite() {
+    isFavorite = !isFavorite;
+  }
+
   static List<Vehicle> getVehicles() {
     List<Vehicle> vehicles = [];
 
     vehicles.add(Vehicle(
-        id: 'v1',
-        name: 'Camry',
-        brand: 'Toyota',
-        categoryIds: ['c2', 'c12'],
-        year: 2023,
-        priceInUsd: 60000,
-        fuelType: FuelType.hybrid,
-        engineCapacityInLiters: 3.5,
-        seatingCapacity: 5,
-        mileageInKmpl: 18,
-        color: Colors.black,
-        transmissionType: TransmissionType.cvt,
-        imageUrl:
-            'https://di-enrollment-api.s3.amazonaws.com/toyota/models/2023/camry-hybrid/2023+Camry+Hybrid/Trims/SE+Hybrid.png',
-        productionStatus: ProductionStatus.massProduced));
+      id: 'v1',
+      name: 'Camry',
+      brand: 'Toyota',
+      categoryIds: ['c2', 'c12'],
+      year: 2023,
+      priceInUsd: 60000,
+      fuelType: FuelType.hybrid,
+      engineCapacityInLiters: 3.5,
+      seatingCapacity: 5,
+      mileageInKmpl: 18,
+      color: Colors.black,
+      transmissionType: TransmissionType.cvt,
+      imageUrl:
+          'https://di-enrollment-api.s3.amazonaws.com/toyota/models/2023/camry-hybrid/2023+Camry+Hybrid/Trims/SE+Hybrid.png',
+      productionStatus: ProductionStatus.massProduced,
+    ));
 
     vehicles.add(Vehicle(
       id: 'v2',
