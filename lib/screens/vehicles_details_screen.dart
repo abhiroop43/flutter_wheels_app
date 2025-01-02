@@ -13,6 +13,16 @@ class VehiclesDetailsScreen extends StatefulWidget {
 class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    var labelStyle = Theme.of(context)
+        .textTheme
+        .bodyMedium!
+        .copyWith(color: Theme.of(context).colorScheme.primary);
+
+    var valueStyle = Theme.of(context)
+        .textTheme
+        .labelMedium!
+        .copyWith(color: Theme.of(context).colorScheme.tertiary);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.vehicle.name,
@@ -51,45 +61,75 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: Text('Brand'),
-                    trailing: Text(widget.vehicle.brand),
+                    title: Text(
+                      'Brand',
+                      style: labelStyle,
+                    ),
+                    trailing: Text(widget.vehicle.brand, style: valueStyle),
                   ),
                   ListTile(
-                    title: Text('Year'),
+                    title: Text(
+                      'Year',
+                      style: labelStyle,
+                    ),
                     trailing: Text(widget.vehicle.year.toString()),
                   ),
                   ListTile(
-                    title: Text('Price'),
+                    title: Text(
+                      'Price',
+                      style: labelStyle,
+                    ),
                     trailing: Text(
                         '\$${widget.vehicle.priceInUsd.toStringAsFixed(2)}'),
                   ),
                   ListTile(
-                    title: Text('Fuel Type'),
+                    title: Text(
+                      'Fuel Type',
+                      style: labelStyle,
+                    ),
                     trailing: Text(widget.vehicle.fuelType.name.toUpperCase()),
                   ),
                   ListTile(
-                    title: Text('Transmission'),
+                    title: Text(
+                      'Transmission',
+                      style: labelStyle,
+                    ),
                     trailing: Text(widget.vehicle.transmissionType.name),
                   ), // TODO: show English value
                   ListTile(
-                    title: Text('Engine Capacity'),
+                    title: Text(
+                      'Engine Capacity',
+                      style: labelStyle,
+                    ),
                     trailing:
                         Text('${widget.vehicle.engineCapacityInLiters} L'),
                   ),
                   ListTile(
-                    title: Text('Seating Capacity'),
+                    title: Text(
+                      'Seating Capacity',
+                      style: labelStyle,
+                    ),
                     trailing: Text('${widget.vehicle.seatingCapacity} seats'),
                   ),
                   ListTile(
-                    title: Text('Mileage'),
+                    title: Text(
+                      'Mileage',
+                      style: labelStyle,
+                    ),
                     trailing: Text('${widget.vehicle.mileageInKmpl} km/l'),
                   ),
                   ListTile(
-                    title: Text('Categories'),
+                    title: Text(
+                      'Categories',
+                      style: labelStyle,
+                    ),
                     trailing: Text(widget.vehicle.categoryIds.join(', ')),
                   ), // TODO: show actual category names
                   ListTile(
-                    title: Text('Production Status'),
+                    title: Text(
+                      'Production Status',
+                      style: labelStyle,
+                    ),
                     trailing: Text(widget.vehicle.productionStatus.name),
                   ), // TODO: show English value
                 ],
