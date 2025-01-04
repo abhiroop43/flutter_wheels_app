@@ -39,6 +39,24 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
                 setState(() {
                   widget.vehicle.toggleFavorite();
                 });
+
+                final successSnackBar = SnackBar(
+                  content: widget.vehicle.isFavorite
+                      ? const Text('Marked as a favorite')
+                      : const Text('Removed from favorites'),
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                  action: SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {
+                      setState(() {
+                        widget.vehicle.toggleFavorite();
+                      });
+                    },
+                  ),
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
               },
             ),
           )
