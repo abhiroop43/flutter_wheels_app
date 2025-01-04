@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wheels_app/screens/categories_screen.dart';
+import 'package:flutter_wheels_app/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.exo2TextTheme(),
         useMaterial3: true,
       ),
-      home: CategoriesScreen(),
+      home: HomeScreen(),
     );
   }
 }
