@@ -157,4 +157,10 @@ class Vehicle {
 
     return vehicles;
   }
+
+  static List<Vehicle> getFavorites() {
+    List<Vehicle> allVehicles = getVehicles();
+
+    return allVehicles.where((v) => v.isFavorite == true).toList();
+  }
 }
