@@ -11,6 +11,21 @@ class VehiclesDetailsScreen extends StatefulWidget {
 }
 
 class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
+  // fix: dismiss the snackbar as soon as user navigates to another screen
+  late ScaffoldMessengerState scaffoldMessenger;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    scaffoldMessenger = ScaffoldMessenger.of(context);
+  }
+
+  @override
+  void dispose() {
+    scaffoldMessenger.hideCurrentSnackBar();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var labelStyle = Theme.of(context)
@@ -49,9 +64,11 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
                   action: SnackBarAction(
                     label: 'Undo',
                     onPressed: () {
-                      setState(() {
-                        widget.vehicle.toggleFavorite();
-                      });
+                      if (mounted) {
+                        setState(() {
+                          widget.vehicle.toggleFavorite();
+                        });
+                      }
                     },
                   ),
                 );
