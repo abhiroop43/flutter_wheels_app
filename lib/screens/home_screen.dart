@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_wheels_app/models/category.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
+import 'package:flutter_wheels_app/screens/filters_screen.dart';
+import 'package:flutter_wheels_app/widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String routeName = '/home';
   const HomeScreen({super.key});
 
   @override
@@ -14,6 +17,26 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
 
   static const screenNames = ['Categories', 'Favorites'];
+
+  void _setScreen(String identifier) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+
+    if (identifier == 'filters') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return FiltersScreen();
+      }));
+    } else if (identifier == 'categories' && widget.routeName != '/home') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return HomeScreen();
+      }));
+    } else if (identifier == 'categories' && widget.routeName == '/home') {
+      setState(() {
+        currentPageIndex = 0;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,52 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).colorScheme.onPrimaryContainer)),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer),
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.directions_car,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        size: 32,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text('Vrooom!!',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer)),
-                    ],
-                  ),
-                )),
-            ListTile(
-              leading: const Icon(Icons.select_all),
-              title: const Text('Vehicles'),
-              onTap: () {
-                // TODO: show all vehicles
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.filter_alt),
-              title: const Text('Filters'),
-              onTap: () {
-                // TODO: show filters
-              },
-            )
-          ],
-        ),
+      drawer: AppDrawer(
+        setScreen: _setScreen,
       ),
       bottomNavigationBar: NavigationBar(
         height: 68,
