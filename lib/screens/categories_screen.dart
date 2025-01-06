@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wheels_app/models/category.dart';
+import 'package:flutter_wheels_app/models/vehicle.dart';
 import 'package:flutter_wheels_app/widgets/categories_grid_item.dart';
 
-class CategoriesScreen extends StatelessWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({
     super.key,
     required this.categories,
   });
 
   final List<Category> categories;
+
+  @override
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends State<CategoriesScreen> {
+  final List<Vehicle> _vehicles = Vehicle.getVehicles();
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +28,11 @@ class CategoriesScreen extends StatelessWidget {
         crossAxisSpacing: 20,
         mainAxisSpacing: 20,
       ),
-      children: categories.map((category) {
-        return CategoriesGridItem(category: category);
+      children: widget.categories.map((category) {
+        return CategoriesGridItem(
+          category: category,
+          vehicles: _vehicles,
+        );
       }).toList(),
     );
   }

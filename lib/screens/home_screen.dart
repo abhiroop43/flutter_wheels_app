@@ -18,15 +18,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const screenNames = ['Categories', 'Favorites'];
 
-  void _setScreen(String identifier) {
+  void _setScreen(String identifier) async {
     if (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
 
     if (identifier == 'filters') {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      final result = await Navigator.of(context)
+          .push<Map<Filter, bool>>(MaterialPageRoute(builder: (context) {
         return FiltersScreen();
       }));
+      debugPrint('Filters: $result');
     } else if (identifier == 'categories' && widget.routeName != '/home') {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return HomeScreen();
