@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wheels_app/screens/filters_screen.dart';
-import 'package:flutter_wheels_app/screens/home_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  final void Function(String identifier) setScreen;
   const AppDrawer({
     super.key,
+    required this.setScreen,
   });
 
   @override
@@ -43,13 +43,14 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.category),
             title: const Text('Categories'),
             onTap: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
+              setScreen('categories');
+              // if (Navigator.of(context).canPop()) {
+              //   Navigator.of(context).pop();
+              // }
 
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return HomeScreen();
-              }));
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              //   return HomeScreen();
+              // }));
             },
           ),
           ListTile(
@@ -63,14 +64,17 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.filter_alt),
             title: const Text('Filters'),
             onTap: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return FiltersScreen();
-              }));
+              setScreen('filters');
             },
+            // () {
+            //   if (Navigator.of(context).canPop()) {
+            //     Navigator.of(context).pop();
+            //   }
+
+            //   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            //     return FiltersScreen();
+            //   }));
+            // },
           )
         ],
       ),

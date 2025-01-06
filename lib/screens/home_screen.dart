@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_wheels_app/models/category.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
+import 'package:flutter_wheels_app/screens/filters_screen.dart';
 import 'package:flutter_wheels_app/widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const routeName = '/home';
+  final String routeName = '/home';
   const HomeScreen({super.key});
 
   @override
@@ -16,6 +17,26 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
 
   static const screenNames = ['Categories', 'Favorites'];
+
+  void _setScreen(String identifier) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+
+    if (identifier == 'filters') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return FiltersScreen();
+      }));
+    } else if (identifier == 'categories' && widget.routeName != '/home') {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return HomeScreen();
+      }));
+    } else if (identifier == 'categories' && widget.routeName == '/home') {
+      setState(() {
+        currentPageIndex = 0;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).colorScheme.onPrimaryContainer)),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawer(
+        setScreen: _setScreen,
+      ),
       bottomNavigationBar: NavigationBar(
         height: 68,
         destinations: <Widget>[
