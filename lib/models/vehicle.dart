@@ -107,7 +107,7 @@ class Vehicle {
       seatingCapacity: 5,
       mileageInKmpl: 0.0,
       color: Colors.blue,
-      transmissionType: TransmissionType.automatic,
+      transmissionType: TransmissionType.cvt,
       imageUrl:
           'https://static.wixstatic.com/media/a81051_f78b3eda238f4140841f01022c798c8d~mv2.jpg/v1/fill/w_1000,h_667,al_c,q_85,usm_0.66_1.00_0.01/a81051_f78b3eda238f4140841f01022c798c8d~mv2.jpg',
       productionStatus: ProductionStatus.massProduced,

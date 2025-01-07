@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 enum Filter {
-  suv,
-  sedan,
+  fuelElectric,
+  transAutomatic,
 }
 
 class FiltersScreen extends StatefulWidget {
@@ -14,8 +14,8 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  bool _suvFilterSet = false;
-  bool _sedanFilterSet = false;
+  bool _fuelElectricFilterSet = false;
+  bool _transAutoFilterSet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,28 +31,28 @@ class _FiltersScreenState extends State<FiltersScreen> {
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
           Navigator.of(context).pop({
-            Filter.suv: _suvFilterSet,
-            Filter.sedan: _sedanFilterSet,
+            Filter.fuelElectric: _fuelElectricFilterSet,
+            Filter.transAutomatic: _transAutoFilterSet,
           });
         },
         child: ListView(
           children: <Widget>[
             SwitchListTile(
-              value: _suvFilterSet,
+              value: _fuelElectricFilterSet,
               onChanged: (value) {
                 setState(() {
-                  _suvFilterSet = value;
+                  _fuelElectricFilterSet = value;
                 });
               },
               title: Text(
-                'SUV',
+                'Electric',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
                     .copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
               subtitle: Text(
-                'Only include vehicles with high seating capacity',
+                'Not powered by fossil fuels',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -62,21 +62,21 @@ class _FiltersScreenState extends State<FiltersScreen> {
               contentPadding: EdgeInsets.only(left: 34, right: 22),
             ),
             SwitchListTile(
-              value: _sedanFilterSet,
+              value: _transAutoFilterSet,
               onChanged: (value) {
                 setState(() {
-                  _sedanFilterSet = value;
+                  _transAutoFilterSet = value;
                 });
               },
               title: Text(
-                'Sedan',
+                'Automatic',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
                     .copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
               subtitle: Text(
-                'Only include stylish vehicles to cruise around with',
+                'Automatic transmission available by default',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
