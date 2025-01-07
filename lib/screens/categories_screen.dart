@@ -6,17 +6,17 @@ import 'package:flutter_wheels_app/widgets/categories_grid_item.dart';
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({
     super.key,
-    required this.categories,
+    required this.categories, required this.vehicles,
   });
 
   final List<Category> categories;
+  final List<Vehicle> vehicles;
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  final List<Vehicle> _vehicles = Vehicle.getVehicles();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       children: widget.categories.map((category) {
         return CategoriesGridItem(
           category: category,
-          vehicles: _vehicles,
+          vehicles: widget.vehicles,
         );
       }).toList(),
     );

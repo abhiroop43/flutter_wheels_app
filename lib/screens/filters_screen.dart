@@ -7,7 +7,9 @@ enum Filter {
 
 class FiltersScreen extends StatefulWidget {
   static const routeName = '/filters';
-  const FiltersScreen({super.key});
+  final Map<Filter, bool> savedFilters;
+
+  const FiltersScreen({super.key, required this.savedFilters});
 
   @override
   State<FiltersScreen> createState() => _FiltersScreenState();
@@ -16,6 +18,13 @@ class FiltersScreen extends StatefulWidget {
 class _FiltersScreenState extends State<FiltersScreen> {
   bool _fuelElectricFilterSet = false;
   bool _transAutoFilterSet = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fuelElectricFilterSet = widget.savedFilters[Filter.fuelElectric]!;
+    _transAutoFilterSet = widget.savedFilters[Filter.transAutomatic]!;
+  }
 
   @override
   Widget build(BuildContext context) {
