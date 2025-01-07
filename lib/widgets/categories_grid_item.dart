@@ -5,10 +5,11 @@ import 'package:flutter_wheels_app/screens/vehicles_screen.dart';
 
 class CategoriesGridItem extends StatelessWidget {
   final Category category;
-  const CategoriesGridItem({super.key, required this.category});
+  final List<Vehicle> vehicles;
+  const CategoriesGridItem({super.key, required this.category, required this.vehicles});
 
   List<Vehicle> _selectCategory(String categoryId) {
-    return Vehicle.getVehicles()
+    return vehicles
         .where((vehicle) => vehicle.categoryIds.contains(categoryId))
         .toList();
   }
