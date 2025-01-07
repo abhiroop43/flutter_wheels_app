@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/providers/favorites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class VehiclesDetailsScreen extends StatefulWidget {
+class VehiclesDetailsScreen extends ConsumerStatefulWidget {
   final Vehicle vehicle;
   const VehiclesDetailsScreen({super.key, required this.vehicle});
 
   @override
-  State<VehiclesDetailsScreen> createState() => _VehiclesDetailsScreenState();
+  ConsumerState<VehiclesDetailsScreen> createState() =>
+      _VehiclesDetailsScreenState();
 }
 
-class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
+class _VehiclesDetailsScreenState extends ConsumerState<VehiclesDetailsScreen> {
   // fix: dismiss the snackbar as soon as user navigates to another screen
   late ScaffoldMessengerState scaffoldMessenger;
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.vehicle.isFavorite;
+  }
 
   @override
   void didChangeDependencies() {
@@ -38,6 +48,15 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.tertiary);
 
+    var favoriteVehicles =
+        ref.watch(favoritesProvider).where((v) => v.id == widget.vehicle.id);
+
+    if (favoriteVehicles.firstOrNull != null) {
+      isFavorite = favoriteVehicles.first.isFavorite;
+    } else {
+      isFavorite = false;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.vehicle.name,
@@ -47,16 +66,15 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: IconButton(
-              icon: widget.vehicle.isFavorite
-                  ? Icon(Icons.star)
-                  : Icon(Icons.star_border),
+              icon: isFavorite ? Icon(Icons.star) : Icon(Icons.star_border),
               onPressed: () {
-                setState(() {
-                  widget.vehicle.toggleFavorite();
-                });
+                final wasAdded = ref
+                    .read(favoritesProvider.notifier)
+                    .toggleFavorite(widget.vehicle);
 
+                ScaffoldMessenger.of(context).clearSnackBars();
                 final successSnackBar = SnackBar(
-                  content: widget.vehicle.isFavorite
+                  content: wasAdded
                       ? const Text('Marked as a favorite')
                       : const Text('Removed from favorites'),
                   behavior: SnackBarBehavior.floating,
@@ -64,10 +82,11 @@ class _VehiclesDetailsScreenState extends State<VehiclesDetailsScreen> {
                   action: SnackBarAction(
                     label: 'Undo',
                     onPressed: () {
+                      ScaffoldMessenger.of(context).clearSnackBars();
                       if (mounted) {
-                        setState(() {
-                          widget.vehicle.toggleFavorite();
-                        });
+                        ref
+                            .read(favoritesProvider.notifier)
+                            .toggleFavorite(widget.vehicle);
                       }
                     },
                   ),

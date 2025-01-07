@@ -40,22 +40,6 @@ class Vehicle {
     required this.productionStatus,
   });
 
-  static final List<Vehicle> _favoriteVehicles = [];
-  static final ValueNotifier<List<Vehicle>> favoriteVehiclesNotifier =
-      ValueNotifier(_favoriteVehicles);
-
-  void toggleFavorite() {
-    isFavorite = !isFavorite;
-
-    if (isFavorite) {
-      _favoriteVehicles.add(this);
-    } else {
-      _favoriteVehicles.remove(this);
-    }
-
-    favoriteVehiclesNotifier.value = List.from(_favoriteVehicles);
-  }
-
   static List<Vehicle> getVehicles() {
     List<Vehicle> vehicles = [];
 
@@ -168,9 +152,5 @@ class Vehicle {
     ));
 
     return vehicles;
-  }
-
-  static List<Vehicle> getFavorites() {
-    return _favoriteVehicles;
   }
 }

@@ -8,7 +8,7 @@ import 'package:flutter_wheels_app/screens/favorites_screen.dart';
 import 'package:flutter_wheels_app/screens/filters_screen.dart';
 import 'package:flutter_wheels_app/widgets/app_drawer.dart';
 
-const vehicleInitFilter = {
+const kVehicleInitFilter = {
   Filter.fuelElectric: false,
   Filter.transAutomatic: false,
 };
@@ -31,7 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    vehicleFilters = vehicleInitFilter;
+    vehicleFilters = kVehicleInitFilter;
   }
 
   void _setScreen(String identifier) async {
@@ -48,7 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }));
 
       setState(() {
-        vehicleFilters = result ?? vehicleInitFilter;
+        vehicleFilters = result ?? kVehicleInitFilter;
       });
     } else if (identifier == 'categories' && widget.routeName != '/home') {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
