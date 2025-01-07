@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wheels_app/models/category.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/providers/vehicles_provider.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
 import 'package:flutter_wheels_app/screens/filters_screen.dart';
@@ -11,15 +13,15 @@ const vehicleInitFilter = {
   Filter.transAutomatic: false,
 };
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final String routeName = '/home';
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentPageIndex = 0;
 
   Map<Filter, bool> vehicleFilters = {};
@@ -59,10 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  List<Vehicle> _getFilteredVehicles() {
-    List<Vehicle> vehicles = Vehicle.getVehicles();
-
-    vehicles = vehicles.where((vehicle) {
+  List<Vehicle> _getFilteredVehicles(List<Vehicle> vehicles) {
+    return vehicles.where((vehicle) {
       if (vehicleFilters[Filter.fuelElectric]! &&
           vehicle.fuelType != FuelType.electric) {
         return false;
@@ -73,14 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       return true;
     }).toList();
-
-    return vehicles;
   }
 
   @override
   Widget build(BuildContext context) {
+    final allVehicles = ref.watch(vehiclesProvider);
+
     List<Category> categories = Category.getCategories();
-    List<Vehicle> vehicles = _getFilteredVehicles();
+    List<Vehicle> vehicles = _getFilteredVehicles(allVehicles);
 
     return Scaffold(
       appBar: AppBar(
