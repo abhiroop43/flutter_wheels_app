@@ -1,33 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wheels_app/models/filter.dart';
+import 'package:flutter_wheels_app/providers/filters_provider.dart';
 
-enum Filter {
-  fuelElectric,
-  transAutomatic,
-}
-
-class FiltersScreen extends StatefulWidget {
+class FiltersScreen extends ConsumerWidget {
   static const routeName = '/filters';
-  final Map<Filter, bool> savedFilters;
-
-  const FiltersScreen({super.key, required this.savedFilters});
+  const FiltersScreen({super.key});
 
   @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeFilters = ref.watch(filtersProvider);
 
-class _FiltersScreenState extends State<FiltersScreen> {
-  bool _fuelElectricFilterSet = false;
-  bool _transAutoFilterSet = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fuelElectricFilterSet = widget.savedFilters[Filter.fuelElectric]!;
-    _transAutoFilterSet = widget.savedFilters[Filter.transAutomatic]!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Filters',
@@ -35,67 +18,57 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 color: Theme.of(context).colorScheme.onPrimaryContainer)),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          Navigator.of(context).pop({
-            Filter.fuelElectric: _fuelElectricFilterSet,
-            Filter.transAutomatic: _transAutoFilterSet,
-          });
-        },
-        child: ListView(
-          children: <Widget>[
-            SwitchListTile(
-              value: _fuelElectricFilterSet,
-              onChanged: (value) {
-                setState(() {
-                  _fuelElectricFilterSet = value;
-                });
-              },
-              title: Text(
-                'Electric',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                'Not powered by fossil fuels',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: EdgeInsets.only(left: 34, right: 22),
+      body: ListView(
+        children: <Widget>[
+          SwitchListTile(
+            value: activeFilters[Filter.fuelElectric]!,
+            onChanged: (value) {
+              ref
+                  .read(filtersProvider.notifier)
+                  .setFilter(Filter.fuelElectric, value);
+            },
+            title: Text(
+              'Electric',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-            SwitchListTile(
-              value: _transAutoFilterSet,
-              onChanged: (value) {
-                setState(() {
-                  _transAutoFilterSet = value;
-                });
-              },
-              title: Text(
-                'Automatic',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              subtitle: Text(
-                'Automatic transmission available by default',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: EdgeInsets.only(left: 34, right: 22),
+            subtitle: Text(
+              'Not powered by fossil fuels',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
-          ],
-        ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: EdgeInsets.only(left: 34, right: 22),
+          ),
+          SwitchListTile(
+            value: activeFilters[Filter.transAutomatic]!,
+            onChanged: (value) {
+              ref
+                  .read(filtersProvider.notifier)
+                  .setFilter(Filter.transAutomatic, value);
+            },
+            title: Text(
+              'Automatic',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            subtitle: Text(
+              'Automatic transmission available by default',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
+            ),
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            contentPadding: EdgeInsets.only(left: 34, right: 22),
+          ),
+        ],
       ),
     );
   }

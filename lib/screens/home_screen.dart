@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wheels_app/models/category.dart';
+import 'package:flutter_wheels_app/models/filter.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/providers/filters_provider.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
 import 'package:flutter_wheels_app/screens/filters_screen.dart';
 import 'package:flutter_wheels_app/widgets/app_drawer.dart';
 
-const vehicleInitFilter = {
+const kVehicleInitFilter = {
   Filter.fuelElectric: false,
   Filter.transAutomatic: false,
 };
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final String routeName = '/home';
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentPageIndex = 0;
-
-  Map<Filter, bool> vehicleFilters = {};
-
   static const screenNames = ['Categories', 'Favorites'];
 
   @override
   void initState() {
     super.initState();
-    vehicleFilters = vehicleInitFilter;
   }
 
   void _setScreen(String identifier) async {
@@ -38,16 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (identifier == 'filters') {
-      final result = await Navigator.of(context)
+      await Navigator.of(context)
           .push<Map<Filter, bool>>(MaterialPageRoute(builder: (context) {
-        return FiltersScreen(
-          savedFilters: vehicleFilters,
-        );
+        return FiltersScreen();
       }));
-
-      setState(() {
-        vehicleFilters = result ?? vehicleInitFilter;
-      });
     } else if (identifier == 'categories' && widget.routeName != '/home') {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return HomeScreen();
@@ -59,28 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  List<Vehicle> _getFilteredVehicles() {
-    List<Vehicle> vehicles = Vehicle.getVehicles();
-
-    vehicles = vehicles.where((vehicle) {
-      if (vehicleFilters[Filter.fuelElectric]! &&
-          vehicle.fuelType != FuelType.electric) {
-        return false;
-      }
-      if (vehicleFilters[Filter.transAutomatic]! &&
-          vehicle.transmissionType != TransmissionType.automatic) {
-        return false;
-      }
-      return true;
-    }).toList();
-
-    return vehicles;
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Category> categories = Category.getCategories();
-    List<Vehicle> vehicles = _getFilteredVehicles();
+    List<Vehicle> vehicles = ref.watch(filteredVehiclesProvider);
 
     return Scaffold(
       appBar: AppBar(
