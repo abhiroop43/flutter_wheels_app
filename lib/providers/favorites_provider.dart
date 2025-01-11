@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+  import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
 
 class FavoritesNotifier extends StateNotifier<List<Vehicle>> {

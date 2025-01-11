@@ -1,0 +1,4 @@
+enum Filter {
+  fuelElectric,
+  transAutomatic,
+}

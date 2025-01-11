@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wheels_app/models/category.dart';
+import 'package:flutter_wheels_app/models/filter.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
+import 'package:flutter_wheels_app/providers/filters_provider.dart';
 import 'package:flutter_wheels_app/providers/vehicles_provider.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
@@ -23,15 +25,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentPageIndex = 0;
-
-  Map<Filter, bool> vehicleFilters = {};
-
   static const screenNames = ['Categories', 'Favorites'];
 
   @override
   void initState() {
     super.initState();
-    vehicleFilters = kVehicleInitFilter;
   }
 
   void _setScreen(String identifier) async {
@@ -40,16 +38,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     if (identifier == 'filters') {
-      final result = await Navigator.of(context)
+      await Navigator.of(context)
           .push<Map<Filter, bool>>(MaterialPageRoute(builder: (context) {
-        return FiltersScreen(
-          savedFilters: vehicleFilters,
-        );
+        return FiltersScreen();
       }));
-
-      setState(() {
-        vehicleFilters = result ?? kVehicleInitFilter;
-      });
     } else if (identifier == 'categories' && widget.routeName != '/home') {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return HomeScreen();
@@ -61,13 +53,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  List<Vehicle> _getFilteredVehicles(List<Vehicle> vehicles) {
+  List<Vehicle> _getFilteredVehicles(
+      List<Vehicle> vehicles, Map<Filter, bool> activeFilters) {
     return vehicles.where((vehicle) {
-      if (vehicleFilters[Filter.fuelElectric]! &&
+      if (activeFilters[Filter.fuelElectric]! &&
           vehicle.fuelType != FuelType.electric) {
         return false;
       }
-      if (vehicleFilters[Filter.transAutomatic]! &&
+      if (activeFilters[Filter.transAutomatic]! &&
           vehicle.transmissionType != TransmissionType.automatic) {
         return false;
       }
@@ -78,9 +71,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final allVehicles = ref.watch(vehiclesProvider);
+    final activeFilters = ref.watch(filtersProvider);
 
     List<Category> categories = Category.getCategories();
-    List<Vehicle> vehicles = _getFilteredVehicles(allVehicles);
+    List<Vehicle> vehicles = _getFilteredVehicles(allVehicles, activeFilters);
 
     return Scaffold(
       appBar: AppBar(

@@ -48,14 +48,8 @@ class _VehiclesDetailsScreenState extends ConsumerState<VehiclesDetailsScreen> {
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.tertiary);
 
-    var favoriteVehicles =
-        ref.watch(favoritesProvider).where((v) => v.id == widget.vehicle.id);
-
-    if (favoriteVehicles.firstOrNull != null) {
-      isFavorite = favoriteVehicles.first.isFavorite;
-    } else {
-      isFavorite = false;
-    }
+    var isFavorite =
+        ref.watch(favoritesProvider).contains(widget.vehicle);
 
     return Scaffold(
       appBar: AppBar(
