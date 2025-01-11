@@ -4,7 +4,6 @@ import 'package:flutter_wheels_app/models/category.dart';
 import 'package:flutter_wheels_app/models/filter.dart';
 import 'package:flutter_wheels_app/models/vehicle.dart';
 import 'package:flutter_wheels_app/providers/filters_provider.dart';
-import 'package:flutter_wheels_app/providers/vehicles_provider.dart';
 import 'package:flutter_wheels_app/screens/categories_screen.dart';
 import 'package:flutter_wheels_app/screens/favorites_screen.dart';
 import 'package:flutter_wheels_app/screens/filters_screen.dart';
@@ -53,28 +52,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  List<Vehicle> _getFilteredVehicles(
-      List<Vehicle> vehicles, Map<Filter, bool> activeFilters) {
-    return vehicles.where((vehicle) {
-      if (activeFilters[Filter.fuelElectric]! &&
-          vehicle.fuelType != FuelType.electric) {
-        return false;
-      }
-      if (activeFilters[Filter.transAutomatic]! &&
-          vehicle.transmissionType != TransmissionType.automatic) {
-        return false;
-      }
-      return true;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final allVehicles = ref.watch(vehiclesProvider);
-    final activeFilters = ref.watch(filtersProvider);
-
     List<Category> categories = Category.getCategories();
-    List<Vehicle> vehicles = _getFilteredVehicles(allVehicles, activeFilters);
+    List<Vehicle> vehicles = ref.watch(filteredVehiclesProvider);
 
     return Scaffold(
       appBar: AppBar(
