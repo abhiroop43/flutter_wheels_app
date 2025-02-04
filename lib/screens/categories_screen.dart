@@ -6,7 +6,8 @@ import 'package:flutter_wheels_app/widgets/categories_grid_item.dart';
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({
     super.key,
-    required this.categories, required this.vehicles,
+    required this.categories,
+    required this.vehicles,
   });
 
   final List<Category> categories;
@@ -16,11 +17,31 @@ class CategoriesScreen extends StatefulWidget {
   State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
+class _CategoriesScreenState extends State<CategoriesScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        vsync: this,
+        lowerBound: 0,
+        upperBound: 1,
+        duration: Duration(milliseconds: 300));
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
+    var gridView = GridView(
       padding: EdgeInsets.all(24),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -35,5 +56,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         );
       }).toList(),
     );
+
+    return AnimatedBuilder(
+        animation: _animationController,
+        child: gridView,
+        builder: (context, child) => Padding(
+              padding:
+                  EdgeInsets.only(top: 100 - _animationController.value * 100),
+              child: child,
+            ));
   }
 }
