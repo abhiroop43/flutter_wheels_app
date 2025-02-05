@@ -48,8 +48,7 @@ class _VehiclesDetailsScreenState extends ConsumerState<VehiclesDetailsScreen> {
         .labelMedium!
         .copyWith(color: Theme.of(context).colorScheme.tertiary);
 
-    var isFavorite =
-        ref.watch(favoritesProvider).contains(widget.vehicle);
+    var isFavorite = ref.watch(favoritesProvider).contains(widget.vehicle);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +59,19 @@ class _VehiclesDetailsScreenState extends ConsumerState<VehiclesDetailsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: IconButton(
-              icon: isFavorite ? Icon(Icons.star) : Icon(Icons.star_border),
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  isFavorite ? Icons.star : Icons.star_border,
+                  key: ValueKey(isFavorite),
+                ),
+                transitionBuilder: (child, animation) {
+                  return RotationTransition(
+                    turns: Tween<double>(begin: 0.8, end: 1).animate(animation),
+                    child: child,
+                  );
+                },
+              ), // isFavorite ? Icon(Icons.star) : Icon(Icons.star_border),
               onPressed: () {
                 final wasAdded = ref
                     .read(favoritesProvider.notifier)
@@ -98,12 +109,15 @@ class _VehiclesDetailsScreenState extends ConsumerState<VehiclesDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(widget.vehicle.imageUrl),
-              fit: BoxFit.cover,
-              height: 400,
-              width: double.infinity,
+            Hero(
+              tag: widget.vehicle.id,
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(widget.vehicle.imageUrl),
+                fit: BoxFit.cover,
+                height: 400,
+                width: double.infinity,
+              ),
             ),
             Expanded(
               child: ListView(
